@@ -1,0 +1,16 @@
+[
+    {
+        "model": "films.filmtype",
+        "pk": 0,
+        "fields": {
+            "name": "series"
+        }
+    },
+    {
+        "model": "films.filmtype",
+        "pk": 1,
+        "fields": {
+            "name": "movie"
+        }
+    }
+]
