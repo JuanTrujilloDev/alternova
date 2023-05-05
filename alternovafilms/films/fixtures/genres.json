@@ -1,0 +1,198 @@
+[
+    {
+        "model": "films.genre",
+        "pk": 0,
+        "fields": {
+            "name": "Western"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 1,
+        "fields": {
+            "name": "Reality-TV"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 2,
+        "fields": {
+            "name": "Sci-Fi"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 3,
+        "fields": {
+            "name": "Biography"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 4,
+        "fields": {
+            "name": "Romance"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 5,
+        "fields": {
+            "name": "Family"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 6,
+        "fields": {
+            "name": "Crime"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 7,
+        "fields": {
+            "name": "Adventure"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 8,
+        "fields": {
+            "name": "Talk-Show"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 9,
+        "fields": {
+            "name": "Musical"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 10,
+        "fields": {
+            "name": "Game-Show"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 11,
+        "fields": {
+            "name": "News"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 12,
+        "fields": {
+            "name": "Short"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 13,
+        "fields": {
+            "name": "Mystery"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 14,
+        "fields": {
+            "name": "History"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 15,
+        "fields": {
+            "name": "Music"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 16,
+        "fields": {
+            "name": "Horror"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 17,
+        "fields": {
+            "name": "Adult"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 18,
+        "fields": {
+            "name": "Drama"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 19,
+        "fields": {
+            "name": "War"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 20,
+        "fields": {
+            "name": "Comedy"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 21,
+        "fields": {
+            "name": "Fantasy"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 22,
+        "fields": {
+            "name": "Animation"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 23,
+        "fields": {
+            "name": "Action"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 24,
+        "fields": {
+            "name": "Sport"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 25,
+        "fields": {
+            "name": "Documentary"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 26,
+        "fields": {
+            "name": "Thriller"
+        }
+    },
+    {
+        "model": "films.genre",
+        "pk": 27,
+        "fields": {
+            "name": "Film-Noir"
+        }
+    }
+]

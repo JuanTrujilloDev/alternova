@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load film_extras %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/ordering.css' %}">
+<link rel="stylesheet" href="{% static 'css/pagination.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include 'components/nav.html' %}
+
+<div class="container my-4">
+
+    <div class="row mx-auto px-0">
+
+        <div class="container-fluid row d-flex justify-content-center">
+            <h1 class="col-10 text-lg-start text-sm-center">Films Database {{view}}</h1>
+            {% if results %}
+            <h3 class="col-10 text-lg-start text-sm-center">Films List - total films: {{total_results}}</h3>
+            <div class="dropdown col-10">
+                <button class="btn btn-secondary dropdown-toggle float-right" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ordering|ordering_value}}
+                </button>
+                <div class="dropdown-menu ordering" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item {% if ordering == 'title'%} bg-primary font-weight-bold text-light {% endif %}"
+                        href="?ordering=title">Title</a>
+                    <a class="dropdown-item {% if ordering == 'genre'%} bg-primary font-weight-bold text-light {% endif %}"
+                        href="?ordering=genre">Genre</a>
+                    <a class="dropdown-item {% if ordering == 'film_type'%} bg-primary font-weight-bold text-light {% endif %}"
+                        href="?ordering=-film_type">Film Type</a>
+                    <a class="dropdown-item {% if ordering == 'visualizations'%} bg-primary font-weight-bold text-light {% endif %}"
+                        href="?ordering=-visualizations">Visualizations</a>
+                    <a class="dropdown-item {% if ordering == 'rating'%} bg-primary font-weight-bold text-light {% endif %}"
+                        href="?ordering=-rating">Rating</a>
+                </div>
+            </div>
+            {% for film in results %}
+            <div class="card px-0 col-xl-3 col-lg-3 col-md-5 col-sm-12 col-xs-1 mx-3 my-3">
+                <img class="card-img-top" src="https://placehold.co/600x400" alt="Card image cap">
+                <div class="card-body d-flex flex-column">
+                    <h4 class="card-title">{{film.title}}</h4>
+                    <p class="card-text mb-0">Genres: {% for genre in film.genre %}{{genre}} {% endfor %}</p>
+                    <p class="card-text mb-0">Film Type: {{film.film_type}}</p>
+                    <p class="card-text mb-0">Rating: {{film.rating}}</p>
+                    <p class="card-text mb-2">Visualizations: {{film.visualizations}}</p>
+                    <a href="{% url 'film_detail' film.slug %}" class="btn btn-primary mt-auto font-weight-bold">View
+                        Detail</a>
+                </div>
+            </div>
+            {% endfor %}
+
+
+            {% if previous or next %}
+
+            {% if ordering %}
+            <p class="text-center mt-4">
+                Page {{ current }} of {{ last_page }}.
+            </p>
+            <nav aria-label="Page navigation bootstrap">
+                <ul class="pagination justify-content-center">
+                    {% if previous %}
+                    <li class="page-item"><a class="page-link" href="?ordering={{ordering}}&page=1">First
+                            page</a></li>
+                    <li class="page-item"><a class="page-link" href="?ordering={{ordering}}&page={{ previous }}"><span
+                                aria-hidden="true">&laquo;</span></a></li>
+                    {% endif %}
+                    {% with last_page|loop_by_number as page_range %}
+                    {% for num in page_range %}
+                    {% if current == num %}
+                    <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > current|add:'-3' and num < current|add:'3' %} <li class="page-item"><a
+                            class="page-link" href="?ordering={{ordering}}&page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                        {% if next %}
+                        <li class="page-item"><a class="page-link" href="?ordering={{ordering}}&page={{next}}"><span
+                                    aria-hidden="true">&raquo;</span></a></li>
+                        <li class="page-item"><a class="page-link" href="?ordering={{ordering}}&page={{last_page}}">Last
+                                page</a>
+                        </li>
+                        {% endif %}
+                </ul>
+            </nav>
+            {% else %}
+            <p class="text-center mt-4">
+                Page {{ current }} of {{ last_page }}.
+            </p>
+            <nav aria-label="Page navigation bootstrap">
+                <ul class="pagination justify-content-center">
+                    {% if previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">First
+                            page</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ previous }}"><span
+                                aria-hidden="true">&laquo;</span></a></li>
+                    {% endif %}
+                    {% with last_page|loop_by_number as page_range %}
+                    {% for num in page_range %}
+                    {% if current == num %}
+                    <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > current|add:'-3' and num < current|add:'3' %} <li class="page-item"><a
+                            class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                        {% if next %}
+                        <li class="page-item"><a class="page-link" href="?page={{next}}"><span
+                                    aria-hidden="true">&raquo;</span></a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{last_page}}">Last
+                                page</a>
+                        </li>
+                        {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            {% endif %}
+
+            {% else %}
+
+            <h4 class="col-10 text-lg-start text-sm-center">Oops, didn't find any films. Try again later.</h4>
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

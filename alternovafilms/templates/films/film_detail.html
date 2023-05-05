@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+{% include 'components/nav.html' %}
+
+{{film.title}}
+{{film.film_type}}
+{{film.rating}}
+{{film.visualizations}}
+{% for genre in film.genre %}
+{{genre}}
+{% endfor %}
+{% endblock content %}
