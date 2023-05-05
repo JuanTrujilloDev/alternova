@@ -51,7 +51,6 @@ class UserFilmRating(models.Model):
 class UserFilmVisualization(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
-    visualization = models.BooleanField(default=False)
 
     def clean(self) -> None:
         visualization = UserFilmVisualization.objects.filter(user=self.user, film=self.film)

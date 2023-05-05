@@ -8,6 +8,7 @@ from films.utils import StandardResultsSetPagination
 from django.http import Http404
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from django.urls import reverse
 
 class HomeView(views.APIView):
     """
@@ -139,6 +140,94 @@ class RandomFilmView(LoginRequiredMixin, views.APIView):
             return film
         except film_models.Film.DoesNotExist:
             raise Http404("Film not found")
+        
+
+class VisualizeFilmView(LoginRequiredMixin, generics.CreateAPIView):
+    serializer_class = film_serializers.FilmVisualizationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
+    renderer_classes = [renderers.JSONRenderer]
+    
+    def get_object(self, data, *args, **kwargs):
+        film_id = data.get("film")
+        try:
+            film = film_models.Film.objects.get(pk=film_id)
+            return film
+        except film_models.Film.DoesNotExist:
+            raise Http404("Film not found")
+    
+    def post(self, request, *args, **kwargs):
+        film = self.get_object(request.data)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(film=film, user=request.user)
+            return response.Response({"data":serializer.data, "film_slug":film.slug, "message":"You have successfully visualized the film"}, status=201)
+        return response.Response(serializer.errors, status=400)
+        
+
+class RateFilmView(LoginRequiredMixin, generics.CreateAPIView):
+    serializer_class = film_serializers.FilmRatingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
+    renderer_classes = [renderers.JSONRenderer]
+
+    def get_object(self, data, *args, **kwargs):
+        film_id = data.get("film")
+        try:
+            film = film_models.Film.objects.get(pk=film_id)
+            return film
+        except film_models.Film.DoesNotExist:
+            raise Http404("Film not found")
+        
+    def post(self, request, *args, **kwargs):
+        film = self.get_object(request.data)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(film=film, user=request.user)
+            return response.Response({"data":serializer.data, "film_slug":film.slug , "message":"You have successfully rated the film"}, status=201)
+        return response.Response(serializer.errors, status=400)
+
+# TODO 
+
+"""
+    Filter Film View
+
+    Will return a list of films filtered by title, genre or film type
+"""
+
+"""
+class FilterFilmView(LoginRequiredMixin, generics.ListAPIView):
+    
+    template_name = "films/search.html"
+    serializer_class = film_serializers.FilmGetSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
+    renderer_classes = [renderers.TemplateHTMLRenderer, renderers.JSONRenderer]
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self, data, *args, **kwargs):
+        title = data.get("title")
+        genre = data.get("genre")
+        film_type = data.get("film_type")
+        try:
+            genre = film_models.Genre.objects.get(name=genre)
+            queryset = film_models.Film.objects.filter(genre=genre)
+            return queryset
+        except film_models.Genre.DoesNotExist:
+            raise Http404("Genre not found")
+    
+    def get(self, request, *args, **kwargs):
+        films = self.get_queryset(request.data)
+        paginator = StandardResultsSetPagination()
+        page = paginator.paginate_queryset(films, request)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return paginator.get_paginated_response(serializer.data, template_name="films/films.html", status=200)
+        
+        serializer = self.get_serializer(films, many=True)
+        return response.Response(serializer.data, template_name="films/films.html", status=200)
+
+"""
     
 
     
