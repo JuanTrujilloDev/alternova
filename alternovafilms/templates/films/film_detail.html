@@ -1,18 +1,69 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load film_extras %}
 
 {% block css %}
 
 {% endblock %}
 
 {% block content %}
-{% include 'components/nav.html' %}
 
-{{film.title}}
-{{film.film_type}}
-{{film.rating}}
-{{film.visualizations}}
-{% for genre in film.genre %}
-{{genre}}
-{% endfor %}
+{% include 'components/nav.html' %}
+<div class="d-flex justify-content-center row">
+    <div class="container-fluid row col mx-0 px-0 min-vw-100">
+        <div class="row col-lg-8 col-md-12 container text-center d-flex justify-content-center px-0">
+            <img class="p-5" height="680" src="https://placehold.co/600x400">
+        </div>
+        <div class="col p-5">
+            <h1 class="pt-5">{{film.title}}</h1>
+            <h4>Tipo: {{film.film_type}}</h4>
+            <h5>{% for genre in film.genre %}
+                {{genre}}
+                {% endfor %}</h5>
+
+            <h6>Rating: {{film.rating}}</h6>
+            <h6>Visualizations: {{film.visualizations}}</h6>
+            {% if not film.pk|watched:request.user.id %}
+            <form class="mt-5" action="{% url 'film_visualize' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="film" value="{{film.pk}}">
+                <input type="hidden" name="user" value="{{request.user.pk}}">
+                <input class="btn btn-primary" type="submit" value="Add to Watched">
+            </form>
+            {% else %}
+            <p class="mt-5">Viewed</p>
+            {% endif %}
+
+            {% if not film.pk|rated:request.user.id %}
+            <div class="col-6">
+                <form class=" mt-2" action="{% url 'film_rate' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="film" value="{{film.pk}}">
+                    <input type="hidden" name="user" value="{{request.user.pk}}">
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control form-inline" name="rating" min="1" max="10" value="1">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit"
+                                style="border-radius: 0% 15% 15% 0%;">Rate</button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+            {% else %}
+            <p class="mt-2">Already rated</p>
+
+            {% endif %}
+
+
+
+
+        </div>
+
+
+
+
+    </div>
+</div>
 {% endblock content %}
