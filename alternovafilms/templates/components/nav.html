@@ -19,6 +19,16 @@
                 <li class="nav-item">
                     <a class="nav-link text-light" href="{% url 'search_film' %}">Advanced Search</a>
                 </li>
+
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'login' %}">Login</a>
+                </li>
+                {% endif %}
             </ul>
 
             <form class="d-flex" role="search" method="GET" action="{% url 'search_film' %}">
