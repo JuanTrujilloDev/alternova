@@ -193,7 +193,7 @@ class VisualizeFilmView(LoginRequiredMixin, generics.CreateAPIView):
         if serializer.is_valid():
             serializer.save(film=film, user=request.user)
             film = {**serializer.data, "film_slug":film.slug ,"visualizations":film.visualizations}
-            return response.Response({"film_data":film, "message":"You have successfully rated the film"}, status=201)
+            return response.Response({"film_data":film, "message":"You have successfully visualized the film"}, status=201)
         return response.Response(serializer.errors, status=400)
         
 
