@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load film_extras %}
+{% block title %}Search{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include 'components/nav.html' %}
+
+
+<div class="row container-fluid py-3 px-3 d-flex justify-content-center">
+    <h1>Advanced Search</h1>
+    <h5>Here you can search any film by Title, Genre or Film Type. Please make sure you fill at least 1 option.</h5>
+
+    <div class="container-fluid d-flex row justify-content-center my-2">
+        <form class="container shadow rounded row py-4 px-3" method="GET" id="search_form"
+            action="{% url 'search_film' %}">
+            {% if message %}
+            <h3>{{message}}</h3>
+            {% endif %}
+            <div class="form-group col-lg-6 col-12 mb-3">
+                <label for="title">Title</label>
+                {% if request.GET.title %}
+                <input type="text" class="form-control" placeholder="Search by title" id="title" name="title"
+                    value="{{request.GET.title}}">
+                {% else %}
+                <input type="text" class="form-control" placeholder="Search by title" id="title" name="title">
+                {% endif %}
+            </div>
+            <div class="form-group col-lg-6 col-12 mb-3">
+                <label for="film_type">Film Type</label>
+                <select type="text" class="form-select" aria-label="Film Type" id="film_type" name="film_type">
+                    <option selected disabled value id="default"> -- Filter by film type -- </option>
+                    {% for film_type in filtering_data.film_types_list %}
+                    {% if film_type.name == request.GET.film_type %}
+                    <option value="{{ film_type.name }}" selected>{{ film_type.name.capitalize }}</option>
+                    {% else %}
+                    <option value="{{ film_type.name }}">{{ film_type.name.capitalize }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+
+            </div>
+
+
+            <div class="form-group mb-4">
+                <label class="col-12" for="genre">Genres</label>
+                {% for genre in filtering_data.genres_list %}
+                <div class="form-check form-check-inline">
+
+                    {% if genre.name in request.GET.genres %}
+                    <input class="form-check-input check-genre" type="checkbox" id="{{genre.name}}"
+                        value="{{genre.name}}" checked>
+                    {% else %}
+                    <input class="form-check-input check-genre" type="checkbox" id="{{genre.name}}"
+                        value="{{genre.name}}">
+                    {% endif %}
+                    <label class="form-check-label" for="{{genre.name}}">
+                        {{genre.name.capitalize}}
+                    </label>
+
+                </div>
+                {% endfor %}
+
+                <input type="hidden" name="genres" id="genres">
+
+
+            </div>
+
+            <div class="row d-flex justify-content-center">
+                <button type="submit" class="btn btn-success col-4 my-3 mx-2">Search</button>
+                <input class="btn btn-secondary col-4 my-3 mx-2" type="reset" value="Reset" id="reset">
+            </div>
+
+
+        </form>
+
+        <div class="row container my-5">
+
+            {% if results.results|length > 0 %}
+            <h3>Results:</h3>
+            {% for film in results.results %}
+
+
+            <div class="card px-0 mb-4" id="film" onclick="openLink('{% url 'film_detail' film.slug %}')"> <!--ignore-->
+                <div class="row g-0">
+                    <div class="col-sm-4 position-relative">
+                        <img src="https://via.placeholder.com/600" class="card-img fit-cover w-100 h-100" alt="...">
+                    </div>
+
+                    <div class="col-sm-8">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a class="link-dark text-decoration-none">
+                                    {{film.title}}</a>
+                            </h5>
+
+                            <p class="card-text mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <p class="card-text">Rating: {{film.rating}}</p>
+                            {% for genre in film.genre %}
+                            <span class="badge rounded-pill bg-dark">{{genre}}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="card-footer text-end text-muted">
+                            <p class="card-text">{{film.film_type}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if previous or next %}
+            <p class="text-center mt-4">
+                Page {{ current }} of {{ last_page }}.
+            </p>
+            {% with request.GET as pagination_data %}
+            <nav aria-label="Page navigation bootstrap">
+                <ul class="pagination justify-content-center">
+                    {% if previous %}
+                    <li class="page-item"><a class="page-link" href="{{pagination_data|filtered_page_number:1}}">First
+                            page</a></li>
+                    <li class="page-item"><a class="page-link"
+                            href="{{pagination_data|filtered_page_number:previous}}"><span
+                                aria-hidden="true">&laquo;</span></a></li>
+                    {% endif %}
+                    {% with last_page|loop_by_number as page_range %}
+                    {% for num in page_range %}
+                    {% if current == num %}
+                    <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > current|add:'-3' and num < current|add:'3' %} <li class="page-item"><a
+                            class="page-link" href="{{pagination_data|filtered_page_number:num}}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                        {% if next %}
+                        <li class="page-item"><a class="page-link"
+                                href="{{pagination_data|filtered_page_number:next}}"><span
+                                    aria-hidden="true">&raquo;</span></a></li>
+                        <li class="page-item"><a class="page-link"
+                                href="{{pagination_data|filtered_page_number:last_page}}">Last
+                                page</a>
+                        </li>
+                        {% endif %}
+                </ul>
+            </nav>
+            {% endwith %}
+            {% endif %}
+
+            {% endif %}
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/search.js' %}"></script>
+{% endblock js %}

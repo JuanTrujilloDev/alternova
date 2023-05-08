@@ -12,4 +12,5 @@ urlpatterns = [
     path("films/visualize/", views.VisualizeFilmView.as_view(), name="film_visualize"),
     path("films/rate/", views.RateFilmView.as_view(), name="film_rate"),
     path("films/random/", views.RandomFilmView.as_view(), name="random_film"),
+    path("films/search/", views.SearchFilmView.as_view(), name="search_film"),
 ]

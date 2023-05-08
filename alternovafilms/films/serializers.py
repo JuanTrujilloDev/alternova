@@ -2,6 +2,17 @@ from rest_framework import serializers
 import films.models as film_models
 
 class FilmGetSerializer(serializers.ModelSerializer):
+    """
+    Film serializer for GET requests
+
+    Args:
+        serializers (ModelSerializer): ModelSerializer from rest_framework
+
+    Returns:
+        FilmGetSerializer: Film serializer for GET requests
+    """
+
+
     genre = serializers.StringRelatedField(many=True)
     film_type = serializers.StringRelatedField()
 
@@ -11,6 +22,19 @@ class FilmGetSerializer(serializers.ModelSerializer):
 
 
 class FilmVisualizationSerializer(serializers.ModelSerializer):
+    """
+    Film serializer for POST requests to add a film to the user's visualizations
+
+    Args:
+        serializers (ModelSerializer): ModelSerializer from rest_framework
+
+    Returns:
+        FilmVisualizationSerializer: Film serializer for POST requests to add a film to the user's visualizations
+
+    Required fields:
+        film (int): Film id
+        user (int): User id
+    """
 
     class Meta:
         model = film_models.UserFilmVisualization
@@ -32,6 +56,20 @@ class FilmVisualizationSerializer(serializers.ModelSerializer):
         
 
 class FilmRatingSerializer(serializers.ModelSerializer):
+    """
+    Film serializer for POST requests to add a film to the user's ratings
+
+    Args:
+        serializers (ModelSerializer): ModelSerializer from rest_framework
+
+    Returns:
+        FilmRatingSerializer: Film serializer for POST requests to add a film to the user's ratings
+
+    Required fields:
+        film (int): Film id
+        user (int): User id
+        rating (int): Rating
+    """
 
     class Meta:
         model = film_models.UserFilmRating

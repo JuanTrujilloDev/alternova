@@ -1,0 +1,13 @@
+.fit-cover {
+    object-fit: cover;
+}
+
+@media (min-width: 768px) {
+    .fit-cover {
+        position: absolute;
+    }
+}
+
+#film:hover {
+    cursor: pointer;
+}
